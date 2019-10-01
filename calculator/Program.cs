@@ -29,6 +29,40 @@ namespace calculator
         {
             return left % right;
         }
+
+        static char inputchar(string message, calculator calc)
+        {
+            while (true)
+            {
+                Console.Write(message);
+                string input;
+                input = Console.ReadLine();
+                if (0 < input.Length)
+                {
+                    if (calc.ValidOp(input[0]))
+                    {return input[0]; }
+                    
+                }
+                Console.WriteLine("Your response was invalid");
+            }
+        }
+
+        static double inputdouble(string message)
+        {
+            double rv;
+            while (true)
+            {
+                Console.Write(message);
+                string input;
+                input = Console.ReadLine();
+                if (double.TryParse(input,out rv))
+                {
+
+                    return rv;
+                }
+                Console.WriteLine("Your response was invalid");
+            }
+        }
         static void Main(string[] args)
         {
             calculator calc = new calculator();
@@ -37,6 +71,25 @@ namespace calculator
             calc.operations.Add('*', mul);
             calc.operations.Add('/', div);
             calc.operations.Add('%', mod);
+
+          
+            
+            while(true)
+            {
+                calc.Left = inputdouble("Enter a Left Number:");
+
+                while (true)
+                {
+                    char c = inputchar("Enter a valid operation +-*/% :", calc);
+                    calc.SetOperation(c );
+
+                    calc.Right = inputdouble("Enter a Right Number: ");
+                    calc.invoke();
+                    Console.WriteLine($"Left is now: {calc.Left}");
+                }
+               
+
+            }
 
             calc.Left = 10;
             calc.SetOperation('+');
@@ -80,6 +133,13 @@ namespace calculator
             Left = _operation(Left, Right);
             _operation = null;
             Right = 0;
+        }
+
+        public bool ValidOp(char c)
+        {
+            
+             return(operations.ContainsKey(c));
+            
         }
         
     }
